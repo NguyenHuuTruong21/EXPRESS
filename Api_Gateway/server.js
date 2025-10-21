@@ -43,6 +43,24 @@ app.use('/products', async (req, res) => {
   }
 });
 
+// Order_Service
+app.use('/orders', async (req, res) => {
+  try {
+    const url = `${process.env.ORDER_SERVICE_URL}${req.url}`;
+    const response = await axios({
+      method: req.method,
+      url: url,
+      data: req.body,
+      headers: req.headers,
+    });
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error('ORDER SERVICE ERROR:', error.message);
+    res
+      .status(error.response?.status || 500)
+      .json(error.response?.data || { message: 'Order Service Error' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`API Gateway running at http://localhost:${PORT}`);
