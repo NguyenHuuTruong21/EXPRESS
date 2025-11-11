@@ -62,6 +62,23 @@ app.use('/orders', async (req, res) => {
   }
 });
 
+// Report_Service
+app.use('/reports', async (req, res) => {
+  try {
+    const url = `${process.env.REPORT_SERVICE_URL}${req.url}`;
+    const response = await axios({
+      method: req.method,
+      url,
+      data: req.body,
+      headers: req.headers
+    });
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error('REPORT SERVICE ERROR:', error.message);
+    res.status(error.response?.status || 500).json(error.response?.data || { message: 'Report Service Error' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`API Gateway running at http://localhost:${PORT}`);
 });
