@@ -62,6 +62,23 @@ app.use('/orders', async (req, res) => {
   }
 });
 
+// Order_Items
+app.use('/order_items', async (req, res) => {
+  try {
+    const url = `${process.env.ORDER_SERVICE_URL}${req.url}`;
+    const response = await axios({
+      method: req.method,
+      url,
+      data: req.body,
+      headers: req.headers,
+    });
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error('ORDER ITEM SERVICE ERROR:', error.message);
+    res.status(error.response?.status || 500).json(error.response?.data || { message: 'Order Item Service Error' });
+  }
+})
+
 // Report_Service
 app.use('/reports', async (req, res) => {
   try {
